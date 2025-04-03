@@ -21,7 +21,7 @@ export class AddressEntity extends Base {
   postal_code: string;
 
   //relations
-  @ManyToOne(() => UserEntity, (user) => user.addressList)
+  @ManyToOne(() => UserEntity, (user) => user.addressList, { cascade: true })
   @JoinColumn({ name: 'user' })
   user: UserEntity;
 }

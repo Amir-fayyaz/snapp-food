@@ -28,5 +28,5 @@ export class UserEntity extends Base {
 
   //relations
   @OneToMany(() => AddressEntity, (address) => address.user)
-  addressList: AddressEntity;
+  addressList: AddressEntity[];
 }

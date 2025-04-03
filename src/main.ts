@@ -1,9 +1,14 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app.module';
+import { InitializeSwagger } from './common/configs/swagger.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  await app.listen(process.env.PORT ?? 3000);
+  InitializeSwagger(app);
+  const { PORT = 3000 } = process.env;
+  await app.listen(PORT, () => {
+    console.log(`swagger run on http://localhost:${PORT}/docs`);
+  });
 }
 bootstrap();
 

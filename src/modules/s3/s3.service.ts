@@ -21,7 +21,7 @@ export class S3Service {
     });
   }
 
-  async upload(file: Express.Multer.File, folderName: string) {
+  async uploadFile(file: Express.Multer.File, folderName: string) {
     const ext = extname(file.originalname); // .png or .jpeg , ...
 
     return await this.s3
@@ -29,6 +29,15 @@ export class S3Service {
         Bucket: S3_BUCKET,
         Key: `${folderName}/${Date.now()}${ext}`,
         Body: file.buffer,
+      })
+      .promise();
+  }
+
+  async deleteFile(key: string) {
+    return await this.s3
+      .deleteObject({
+        Bucket: S3_BUCKET,
+        Key: decodeURI(key),
       })
       .promise();
   }

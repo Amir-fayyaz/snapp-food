@@ -14,7 +14,7 @@ export class S3Service {
     this.s3 = new S3({
       credentials: {
         accessKeyId: S3_ACCESS,
-        secretAccessKey: S3_ACCESS,
+        secretAccessKey: S3_SECRET,
       },
       endpoint: S3_ENDPOINT,
       region: 'default',

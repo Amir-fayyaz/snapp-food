@@ -49,10 +49,27 @@ export class CategoryAdminService {
     });
     if (category) throw new ConflictException('Category already exist');
 
-    return await this.Category_Repository.insert({
+    if (data.parent_id) {
+      const ParentCategory = await this.Category_Repository.findOne({
+        where: { id: data.parent_id },
+      });
+
+      const newCategory = this.Category_Repository.create({
+        title: data.title,
+        slug: data.slug,
+        show: Boolean(data.show),
+        parent: ParentCategory,
+      });
+
+      return await this.Category_Repository.save(newCategory);
+    }
+
+    const newCategory = this.Category_Repository.create({
       title: data.title,
       slug: data.slug,
       show: Boolean(data.show),
     });
+
+    return await this.Category_Repository.save(newCategory);
   }
 }

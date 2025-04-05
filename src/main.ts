@@ -15,6 +15,7 @@ async function bootstrap() {
     }),
   );
   const { PORT = 3000 } = process.env;
+  app.enableCors();
   await app.listen(PORT, () => {
     console.log(`swagger run on http://localhost:${PORT}/docs`);
   });

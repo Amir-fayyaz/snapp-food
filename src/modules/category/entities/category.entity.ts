@@ -13,7 +13,7 @@ export class CategoryEntity extends Base {
   @Column({ type: 'boolean' })
   show: Boolean;
 
-  @Column({ type: 'varchar', nullable: false, default: null })
+  @Column({ type: 'varchar', default: null })
   image: string;
 
   //relations

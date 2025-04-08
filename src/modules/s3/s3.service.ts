@@ -1,49 +1,3 @@
-// import { Injectable } from '@nestjs/common';
-// import { S3 } from 'aws-sdk';
-// import { config } from 'dotenv';
-// import { extname } from 'path';
-
-// config();
-// const { S3_SECRET, S3_ACCESS, S3_BUCKET, S3_ENDPOINT } = process.env;
-
-// @Injectable()
-// export class S3Service {
-//   private readonly s3: S3;
-
-//   constructor() {
-//     this.s3 = new S3({
-//       credentials: {
-//         accessKeyId: S3_ACCESS,
-//         secretAccessKey: S3_SECRET,
-//       },
-//       endpoint: S3_ENDPOINT,
-//       region: 'default',
-//     });
-//   }
-
-//   async uploadFile(file: Express.Multer.File, folderName: string) {
-//     const ext = extname(file.originalname); // .png or .jpeg , ...
-
-//     return await this.s3
-//       .upload({
-//         Bucket: S3_BUCKET,
-//         Key: `${folderName}/${Date.now()}${ext}`,
-//         Body: file.buffer,
-//       })
-//       .promise();
-//   }
-
-//   async deleteFile(key: string) {
-//     return await this.s3
-//       .deleteObject({
-//         Bucket: S3_BUCKET,
-//         Key: decodeURI(key),
-//       })
-//       .promise();
-//   }
-// }
-
-// src/storage/s3.service.ts
 import { Injectable } from '@nestjs/common';
 import {
   S3Client,
@@ -59,21 +13,20 @@ const { S3_SECRET, S3_ACCESS, S3_BUCKET, S3_ENDPOINT } = process.env;
 @Injectable()
 export class S3Service {
   private readonly s3Client: S3Client;
-  private readonly bucketName = S3_BUCKET; // نام سطل خود در لیارا
+  private readonly bucketName = S3_BUCKET;
 
   constructor() {
     this.s3Client = new S3Client({
-      endpoint: S3_ENDPOINT, // آدرس لیارا S3
-      region: 'default', // منطقه پیش‌فرض لیارا
+      endpoint: S3_ENDPOINT,
+      region: 'default',
       credentials: {
-        accessKeyId: S3_ACCESS, // از تنظیمات لیارا
-        secretAccessKey: S3_SECRET, // از تنظیمات لیارا
+        accessKeyId: S3_ACCESS,
+        secretAccessKey: S3_SECRET,
       },
-      forcePathStyle: true, // ضروری برای لیارا
+      forcePathStyle: true,
     });
   }
 
-  // آپلود فایل
   async uploadFile(file: Express.Multer.File, folder: string = '') {
     const key = folder ? `${folder}/${file.originalname}` : file.originalname;
 
@@ -90,7 +43,7 @@ export class S3Service {
         new PutObjectCommand(uploadParams as PutObjectCommandInput),
       );
       return {
-        url: `https://${this.bucketName}.storage.liara.space/${key}`,
+        url: `https://${this.bucketName}.storage.c2.liara.space/${key}`,
         key,
       };
     } catch (error) {
@@ -99,7 +52,6 @@ export class S3Service {
     }
   }
 
-  // حذف فایل
   async deleteFile(key: string) {
     const deleteParams = {
       Bucket: this.bucketName,

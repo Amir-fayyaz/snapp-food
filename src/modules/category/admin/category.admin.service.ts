@@ -43,7 +43,10 @@ export class CategoryAdminService {
   }
 
   //public methods
-  public async createCategory(data: CreateCategoryDto) {
+  public async createCategory(
+    data: CreateCategoryDto,
+    image: Express.Multer.File,
+  ) {
     const category = await this.Category_Repository.findOne({
       where: { slug: data.slug },
     });
@@ -54,20 +57,35 @@ export class CategoryAdminService {
         where: { id: data.parent_id },
       });
 
+      if (!ParentCategory)
+        throw new NotFoundException('There is no category with this id');
+
+      const { url } = await this.S3Service.uploadFile(
+        image,
+        StorageFolderName.Image,
+      );
+
       const newCategory = this.Category_Repository.create({
         title: data.title,
         slug: data.slug,
         show: Boolean(data.show),
         parent: ParentCategory,
+        image: url,
       });
 
       return await this.Category_Repository.save(newCategory);
     }
 
+    const { url } = await this.S3Service.uploadFile(
+      image,
+      StorageFolderName.Image,
+    );
+
     const newCategory = this.Category_Repository.create({
       title: data.title,
       slug: data.slug,
       show: Boolean(data.show),
+      image: url,
     });
 
     return await this.Category_Repository.save(newCategory);

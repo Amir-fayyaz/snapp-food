@@ -1,14 +1,14 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { CategoryAppService } from './category.client.service';
-import { PaginationType } from 'src/common/types/pagination.type';
 import {
   ApiBearerAuth,
   ApiHeader,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { Pagination } from 'src/common/decorators/pagination.decorator';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('api/v1/client/category')
 @ApiTags('client-category')
@@ -26,16 +26,9 @@ export class CategoryAppController {
 
   @Get()
   @ApiHeader({ name: 'authorization' })
+  @Pagination()
   @ApiOperation({ summary: 'For get all categories' })
-  @ApiQuery({
-    name: 'page',
-    type: Number,
-  })
-  @ApiQuery({
-    name: 'take',
-    type: Number,
-  })
-  async getSubCategories(@Query() Queries: PaginationType) {
+  async getSubCategories(@Query() Queries: PaginationDto) {
     return await this.CategoryService.getCategories(Queries);
   }
 }

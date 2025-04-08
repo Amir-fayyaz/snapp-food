@@ -12,6 +12,7 @@ import { S3Service } from './s3.service';
 import { ApiBody, ApiConsumes, ApiQuery } from '@nestjs/swagger';
 import { UploadFileS3 } from 'src/common/interceptors/uploadFile.interceptor';
 import { StorageFolderName } from 'src/common/enums/storage-folderNames.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('api/v1/image')
 export class S3Controller {
@@ -38,7 +39,7 @@ export class S3Controller {
     description: 'folderName for save images',
     enum: StorageFolderName,
   })
-  @UseInterceptors(UploadFileS3('image'))
+  @UseInterceptors(FileInterceptor('image'))
   async uploadFile(
     @UploadedFile(
       new ParseFilePipe({

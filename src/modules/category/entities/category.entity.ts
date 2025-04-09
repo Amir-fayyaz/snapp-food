@@ -16,6 +16,9 @@ export class CategoryEntity extends Base {
   @Column({ type: 'varchar', default: null })
   image: string;
 
+  @Column({ nullable: true, type: 'varchar' })
+  imageKey: string;
+
   //relations
   @ManyToOne(() => CategoryEntity, (category) => category.children, {
     cascade: true,

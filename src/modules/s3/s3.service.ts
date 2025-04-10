@@ -4,6 +4,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
   PutObjectCommandInput,
+  HeadObjectCommand,
 } from '@aws-sdk/client-s3';
 import { config } from 'dotenv';
 
@@ -64,6 +65,23 @@ export class S3Service {
     } catch (error) {
       console.error('Delete Error:', error);
       throw new Error('خطا در حذف فایل');
+    }
+  }
+
+  async CheckFileExists(Bucket: string, Key: string) {
+    try {
+      await this.s3Client.send(
+        new HeadObjectCommand({
+          Bucket,
+          Key,
+        }),
+      );
+      return true;
+    } catch (error) {
+      if (error.name === 'NotFound') {
+        return false;
+      }
+      throw error;
     }
   }
 }

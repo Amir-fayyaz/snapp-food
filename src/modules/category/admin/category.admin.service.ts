@@ -10,6 +10,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import slugify from 'slugify';
 import { S3Service } from 'src/modules/s3/s3.service';
 import { StorageFolderName } from 'src/common/enums/storage-folderNames.enum';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Injectable()
 export class CategoryAdminService {
@@ -76,7 +77,7 @@ export class CategoryAdminService {
       return await this.Category_Repository.save(newCategory);
     }
 
-    const { url } = await this.S3Service.uploadFile(
+    const { url, key } = await this.S3Service.uploadFile(
       image,
       StorageFolderName.Image,
     );
@@ -85,9 +86,87 @@ export class CategoryAdminService {
       title: data.title,
       slug: data.slug,
       show: Boolean(data.show),
+      imageKey: key,
       image: url,
     });
 
     return await this.Category_Repository.save(newCategory);
+  }
+
+  public async updateCategory(
+    id: number,
+    data: UpdateCategoryDto,
+    image: Express.Multer.File,
+  ) {
+    if (image) {
+      const { key, url } = await this.S3Service.uploadFile(
+        image,
+        StorageFolderName.Image,
+      );
+
+      // want to change || add parent
+      if (data.parent_id) {
+        const parent = await this.findCategoryById(data.parent_id);
+        const { show, slug, title } = data;
+
+        const updateResult = await this.Category_Repository.update(id, {
+          title,
+          slug,
+          show: Boolean(show),
+          image: url,
+          imageKey: key,
+        });
+
+        if (updateResult.affected === 0)
+          throw new NotFoundException('There is no category with this id');
+
+        return { success: true };
+      } else {
+        const { show, slug, title } = data;
+
+        const updateResult = await this.Category_Repository.update(id, {
+          title,
+          slug,
+          show: Boolean(show),
+          image: url,
+          imageKey: key,
+        });
+
+        if (updateResult.affected === 0)
+          throw new NotFoundException('There is no category with this id');
+
+        return { success: true };
+      }
+    } else {
+      //if want to change | add parant
+      if (data.parent_id) {
+        const parent = await this.findCategoryById(data.parent_id);
+        const { show, slug, title } = data;
+
+        const updateResult = await this.Category_Repository.update(id, {
+          title,
+          show: Boolean(show),
+          slug,
+          parent,
+        });
+
+        if (updateResult.affected === 0)
+          throw new NotFoundException('There is no category with this id');
+
+        return { success: 'true' };
+      } else {
+        const { show, slug, title } = data;
+        const updateResult = await this.Category_Repository.update(id, {
+          title,
+          slug,
+          show: Boolean(show),
+        });
+
+        if (updateResult.affected === 0)
+          throw new NotFoundException('There is no category with this id');
+
+        return { success: true };
+      }
+    }
   }
 }

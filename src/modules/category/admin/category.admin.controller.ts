@@ -1,7 +1,10 @@
 import {
   Body,
   Controller,
+  Param,
+  ParseIntPipe,
   Post,
+  Put,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -17,11 +20,15 @@ import {
 import { CategoryAdminService } from './category.admin.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { UpdateCategoryDto } from './dto/update-category.dto';
 
 @Controller('api/v1/admin/category')
 @ApiTags('admin-category')
 @ApiBearerAuth()
 @UseGuards()
+@ApiHeader({
+  name: 'authorization',
+})
 export class CategoryAdminController {
   constructor(private readonly CategoryService: CategoryAdminService) {}
 
@@ -31,7 +38,7 @@ export class CategoryAdminController {
   })
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'داده‌های محصول و تصویر',
+    description: 'product & image data',
     type: 'multipart/form-data',
     schema: {
       type: 'object',
@@ -48,15 +55,42 @@ export class CategoryAdminController {
       required: ['title', 'slug', 'image', 'show'],
     },
   })
-  @ApiHeader({
-    name: 'authorization',
-  })
   @UseInterceptors(FileInterceptor('image'))
   async createCategory(
     @Body() data: CreateCategoryDto,
     @UploadedFile() image: Express.Multer.File,
   ) {
-    console.log(data, image.originalname);
     return await this.CategoryService.createCategory(data, image);
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'For update category ' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('image'))
+  @ApiBody({
+    description: 'product & image data',
+    type: 'multipart/form-data',
+    schema: {
+      type: 'object',
+      properties: {
+        title: { type: 'string' },
+        slug: { type: 'string' },
+        show: { type: 'boolean' },
+        parent_id: { type: 'number', example: 2 },
+        image: {
+          type: 'string',
+          format: 'binary',
+          nullable: true,
+        },
+      },
+      required: ['title', 'slug', 'show'],
+    },
+  })
+  async updateCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() data: UpdateCategoryDto,
+    @UploadedFile() image: Express.Multer.File,
+  ) {
+    return await this.CategoryService.updateCategory(id, data, image);
   }
 }

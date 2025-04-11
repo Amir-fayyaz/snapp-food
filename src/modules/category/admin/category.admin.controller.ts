@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -24,6 +25,8 @@ import { CategoryAdminService } from './category.admin.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { Pagination } from 'src/common/decorators/pagination.decorator';
 
 @Controller('api/v1/admin/category')
 @ApiTags('admin-category')
@@ -107,10 +110,18 @@ export class CategoryAdminController {
     return await this.CategoryService.getCategoryBySlug(slug);
   }
 
+  //DELETE
   @Delete(':slug')
   @ApiOperation({ summary: 'For delete category by slug' })
   @ApiParam({ name: 'slug', type: String })
   async deleteCategoryBySlug(@Param('slug') slug: string) {
     return await this.CategoryService.deleteCategoryBySlug(slug);
+  }
+
+  //GET
+  @Get()
+  @Pagination()
+  async getCategories(@Query() paginationDto: PaginationDto) {
+    return await this.CategoryService.getCategories(paginationDto);
   }
 }

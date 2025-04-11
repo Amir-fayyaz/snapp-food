@@ -177,4 +177,13 @@ export class CategoryAdminService {
 
     return category;
   }
+
+  public async deleteCategoryBySlug(slug: string) {
+    const deleteResult = await this.Category_Repository.delete({ slug });
+
+    if (deleteResult.affected === 0)
+      throw new NotFoundException('There is no cateogry with this slug');
+
+    return { success: true };
+  }
 }

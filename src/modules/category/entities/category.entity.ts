@@ -21,7 +21,7 @@ export class CategoryEntity extends Base {
 
   //relations
   @ManyToOne(() => CategoryEntity, (category) => category.children, {
-    cascade: true,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'parant' })
   parent: CategoryEntity;

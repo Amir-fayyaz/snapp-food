@@ -11,6 +11,9 @@ import slugify from 'slugify';
 import { S3Service } from 'src/modules/s3/s3.service';
 import { StorageFolderName } from 'src/common/enums/storage-folderNames.enum';
 import { UpdateCategoryDto } from './dto/update-category.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { Pagination } from 'src/common/utility/pagination.utilty';
+import { skip } from 'node:test';
 
 @Injectable()
 export class CategoryAdminService {
@@ -188,5 +191,20 @@ export class CategoryAdminService {
       throw new NotFoundException('There is no cateogry with this slug');
 
     return { success: true };
+  }
+
+  public async getCategories(paginationDto: PaginationDto) {
+    const pagination = Pagination(paginationDto);
+
+    const [cateogories, count] = await this.Category_Repository.find({
+      skip: pagination.skip,
+      take: pagination.take,
+      relations: { parent: true, children: true },
+    });
+
+    return {
+      count,
+      cateogories,
+    };
   }
 }

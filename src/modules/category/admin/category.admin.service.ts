@@ -48,9 +48,8 @@ export class CategoryAdminService {
     data: CreateCategoryDto,
     image: Express.Multer.File,
   ) {
-    const category = await this.Category_Repository.findOne({
-      where: { slug: data.slug },
-    });
+    const category = await this.findCategoryBySlug(data.slug);
+
     if (category) throw new ConflictException('Category already exist');
 
     if (data.parent_id) {
@@ -168,5 +167,14 @@ export class CategoryAdminService {
         return { success: true };
       }
     }
+  }
+
+  public async getCategoryBySlug(slug: string) {
+    const category = await this.findCategoryBySlug(slug);
+
+    if (!category)
+      throw new NotFoundException('There is no category with this slug');
+
+    return category;
   }
 }

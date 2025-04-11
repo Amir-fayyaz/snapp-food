@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseIntPipe,
   Post,
@@ -15,6 +16,7 @@ import {
   ApiConsumes,
   ApiHeader,
   ApiOperation,
+  ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
 import { CategoryAdminService } from './category.admin.service';
@@ -32,6 +34,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 export class CategoryAdminController {
   constructor(private readonly CategoryService: CategoryAdminService) {}
 
+  //POST
   @Post()
   @ApiOperation({
     summary: 'For create new category',
@@ -63,6 +66,7 @@ export class CategoryAdminController {
     return await this.CategoryService.createCategory(data, image);
   }
 
+  //PUT
   @Put(':id')
   @ApiOperation({ summary: 'For update category ' })
   @ApiConsumes('multipart/form-data')
@@ -92,5 +96,13 @@ export class CategoryAdminController {
     @UploadedFile() image: Express.Multer.File,
   ) {
     return await this.CategoryService.updateCategory(id, data, image);
+  }
+
+  //GET
+  @Get(':slug')
+  @ApiOperation({ summary: 'For recive category with slug' })
+  @ApiParam({ name: 'slug', type: String })
+  async getCategoryBySlug(@Param('slug') slug: string) {
+    return await this.CategoryService.getCategoryBySlug(slug);
   }
 }

@@ -23,7 +23,10 @@ export class CategoryAdminService {
   //private methods
 
   private async findCategoryBySlug(slug: string) {
-    return await this.Category_Repository.findOne({ where: { slug } });
+    return await this.Category_Repository.findOne({
+      where: { slug },
+      relations: { parent: true, children: true },
+    });
   }
 
   private async findCategoryById(id: number) {

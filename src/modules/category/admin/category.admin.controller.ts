@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -104,5 +105,12 @@ export class CategoryAdminController {
   @ApiParam({ name: 'slug', type: String })
   async getCategoryBySlug(@Param('slug') slug: string) {
     return await this.CategoryService.getCategoryBySlug(slug);
+  }
+
+  @Delete(':slug')
+  @ApiOperation({ summary: 'For delete category by slug' })
+  @ApiParam({ name: 'slug', type: String })
+  async deleteCategoryBySlug(@Param('slug') slug: string) {
+    return await this.CategoryService.deleteCategoryBySlug(slug);
   }
 }

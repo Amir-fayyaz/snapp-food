@@ -25,4 +25,10 @@ export class UserAppService {
   public async findUserByMobile(mobile: string) {
     return await this.User_Repository.findOne({ where: { mobile } });
   }
+
+  public async getUserByInviteCode(inviteCode: string) {
+    return await this.User_Repository.findOne({
+      where: { invite_code: inviteCode },
+    });
+  }
 }

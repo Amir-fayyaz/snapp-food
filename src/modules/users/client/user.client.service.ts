@@ -11,13 +11,13 @@ export class UserAppService {
   ) {}
 
   //For exports
-  public async CreateUser(mobile: string) {
+  public async CreateUser(mobile: string, invite_code: string) {
     const user = await this.User_Repository.findOneBy({ mobile });
 
     if (user)
       throw new ConflictException('There is another acount with this mobile');
 
-    const newUser = this.User_Repository.create({ mobile });
+    const newUser = this.User_Repository.create({ mobile, invite_code });
 
     return await this.User_Repository.save(newUser);
   }

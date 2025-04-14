@@ -140,7 +140,7 @@ export class AuthAppService {
         {
           user_id: user.id,
         },
-        { secret: process.env.JWT_SECRET },
+        { secret: process.env.JWT_SECRET, expiresIn: process.env.JWT_EXPIRE },
       );
     } else {
       const uniqueInviteCode = await this.generateUniqueInviteLink(data.mobile);
@@ -152,7 +152,7 @@ export class AuthAppService {
 
       return this.JwtService.sign(
         { user_id: newUser.id },
-        { secret: process.env.JWT_SECRET },
+        { secret: process.env.JWT_SECRET, expiresIn: process.env.JWT_EXPIRE },
       );
     }
   }

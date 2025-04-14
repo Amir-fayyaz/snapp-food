@@ -37,5 +37,5 @@ export class SupplierEntity extends Base {
   agent: SupplierEntity;
 
   @OneToMany(() => SupplierEntity, (supplier) => supplier.agent)
-  subsets: SupplierEntity;
+  subsets: SupplierEntity[];
 }

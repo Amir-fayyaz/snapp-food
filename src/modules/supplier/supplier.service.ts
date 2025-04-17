@@ -60,4 +60,10 @@ export class SupplierService {
       return await this.Supplier_Repository.save(newSupplier);
     }
   }
+
+  public async findSupplierByMobile(mobile: string) {
+    return await this.Supplier_Repository.findOne({
+      where: { manager_mobile: mobile },
+    });
+  }
 }

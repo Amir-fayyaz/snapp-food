@@ -2,7 +2,7 @@ import { Base } from 'src/common/abstracts/baseEntity';
 import { EntityName } from 'src/common/enums/entityName.enum';
 import { BeforeInsert, Column, Entity } from 'typeorm';
 
-@Entity(EntityName.Otp)
+@Entity(EntityName.UserOtp)
 export class OtpEntity extends Base {
   @Column({ type: 'varchar', nullable: false })
   mobile: string;

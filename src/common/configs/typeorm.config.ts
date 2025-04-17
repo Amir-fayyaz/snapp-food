@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { config } from 'dotenv';
+import { SupplierOtpEntity } from 'src/modules/auth/entities/supplier-otp.entity';
 import { OtpEntity } from 'src/modules/auth/entities/user-otp.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
@@ -21,6 +22,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     CategoryEntity,
     OtpEntity,
     SupplierEntity,
+    SupplierOtpEntity,
   ],
   port: Number(DB_PORT),
   synchronize: true,

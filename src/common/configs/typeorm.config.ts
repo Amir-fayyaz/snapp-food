@@ -1,6 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { config } from 'dotenv';
-import { OtpEntity } from 'src/modules/auth/entities/otp.entity';
+import { OtpEntity } from 'src/modules/auth/entities/user-otp.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { AddressEntity } from 'src/modules/users/entities/address.entity';

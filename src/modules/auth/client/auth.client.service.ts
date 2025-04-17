@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { OtpEntity } from '../entities/otp.entity';
+import { OtpEntity } from '../entities/user-otp.entity';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';

@@ -7,6 +7,7 @@ import { SupplierService } from 'src/modules/supplier/supplier.service';
 import { CategoryAppService } from 'src/modules/category/client/category.client.service';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { SupplierOtpEntity } from '../entities/supplier-otp.entity';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -17,6 +18,11 @@ import { SupplierOtpEntity } from '../entities/supplier-otp.entity';
     ]),
   ],
   controllers: [AuthSupplierController],
-  providers: [AuthSupplierService, SupplierService, CategoryAppService],
+  providers: [
+    AuthSupplierService,
+    SupplierService,
+    CategoryAppService,
+    JwtService,
+  ],
 })
 export class AuthSupplierModule {}

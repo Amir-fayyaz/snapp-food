@@ -12,6 +12,12 @@ import { SupplierOtpEntity } from '../entities/supplier-otp.entity';
 import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';
 import { generateCode } from 'src/common/types/generateCode.type';
+import { SignInDto } from './dto/signIn.dto';
+import { JwtService } from '@nestjs/jwt';
+import { CategoryAppService } from 'src/modules/category/client/category.client.service';
+import { config } from 'dotenv';
+
+config();
 
 @Injectable()
 export class AuthSupplierService {
@@ -19,6 +25,8 @@ export class AuthSupplierService {
     private readonly SupplierService: SupplierService,
     @InjectRepository(SupplierOtpEntity)
     private readonly SupplierOtp_Repository: Repository<SupplierOtpEntity>,
+    private readonly JwtService: JwtService,
+    private readonly CategoryService: CategoryAppService,
   ) {}
 
   //private methods
@@ -124,5 +132,43 @@ export class AuthSupplierService {
     await this.SupplierOtp_Repository.save(newOtp);
 
     return newOtpCode.otp;
+  }
+
+  public async login(data: SignInDto) {
+    await this.verifyOtp(data.manager_mobile, data.otp_code);
+
+    const supplier = await this.SupplierService.findSupplierByMobile(
+      data.manager_mobile,
+    );
+
+    // supplier exists
+    if (supplier) {
+      const access_token = await this.JwtService.signAsync(
+        { supplier_id: supplier.id },
+        {
+          secret: process.env.JWT_SECRET,
+          expiresIn: process.env.JWT_EXPIRE,
+        },
+      );
+
+      return { access_token };
+    } else {
+      const newSupplier = await this.SupplierService.createSupplier({
+        category_id: data.category_id,
+        city: data.city,
+        manager_firstname: data.manager_firstname,
+        manager_lastname: data.manager_lastname,
+        manager_mobile: data.manager_mobile,
+        store_name: data.store_name,
+        invite_code: data.invite_code || '',
+      });
+
+      const access_token = await this.JwtService.signAsync(
+        { supplier_id: newSupplier.id },
+        { secret: process.env.JWT_SECRET, expiresIn: process.env.JWT_EXPIRE },
+      );
+
+      return { access_token };
+    }
   }
 }

@@ -1,7 +1,8 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEnum,
   IsInt,
+  IsOptional,
   IsPhoneNumber,
   IsPositive,
   IsString,
@@ -33,9 +34,16 @@ export class SignInDto {
   @ApiProperty({ example: 1 })
   category_id: number;
 
-  @ApiProperty({ required: false })
-  agent_id: number;
-
   @ApiProperty({})
+  @IsString()
+  store_name: string;
+
+  @ApiProperty()
+  @IsString()
+  @Length(5, 5)
+  otp_code: string;
+
+  @ApiPropertyOptional()
+  @IsOptional({})
   invite_code: string;
 }

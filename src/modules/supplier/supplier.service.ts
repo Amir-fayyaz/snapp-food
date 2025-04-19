@@ -55,6 +55,9 @@ export class SupplierService {
         manager_lastname: data.manager_lastname,
         manager_mobile: data.manager_mobile,
         category,
+        store_name: data.store_name,
+        city: data.city,
+        invite_code: data.invite_code || '',
       });
 
       return await this.Supplier_Repository.save(newSupplier);

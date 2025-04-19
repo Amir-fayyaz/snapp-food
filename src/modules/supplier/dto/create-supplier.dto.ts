@@ -29,6 +29,11 @@ export class CreateSupplierDto {
   @IsEnum(City)
   city: City;
 
+  @ApiProperty()
+  @IsString()
+  @Length(3, 70)
+  store_name: string;
+
   @IsPositive()
   @IsInt()
   @ApiProperty({ example: 1 })

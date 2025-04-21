@@ -3,6 +3,7 @@ import { EntityName } from 'src/common/enums/entityName.enum';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { City } from '../enums/city.enum';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
+import { TypeEntity } from 'src/modules/menu/entities/type.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends Base {
@@ -38,4 +39,7 @@ export class SupplierEntity extends Base {
 
   @OneToMany(() => SupplierEntity, (supplier) => supplier.agent)
   subsets: SupplierEntity[];
+
+  @OneToMany(() => TypeEntity, (type) => type.supplier)
+  types: TypeEntity[];
 }

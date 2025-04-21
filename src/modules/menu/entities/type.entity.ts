@@ -8,7 +8,9 @@ export class TypeEntity extends Base {
   @Column({ type: 'varchar' })
   title: string;
 
-  @ManyToOne(() => SupplierEntity, (supplier) => supplier.types)
+  @ManyToOne(() => SupplierEntity, (supplier) => supplier.types, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'supplier' })
   supplier: SupplierEntity;
 }

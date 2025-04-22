@@ -4,6 +4,7 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { City } from '../enums/city.enum';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { TypeEntity } from 'src/modules/menu/entities/type.entity';
+import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends Base {
@@ -42,4 +43,7 @@ export class SupplierEntity extends Base {
 
   @OneToMany(() => TypeEntity, (type) => type.supplier)
   types: TypeEntity[];
+
+  @OneToMany(() => MenuEntity, (menu) => menu.supplier)
+  menu: MenuEntity[];
 }

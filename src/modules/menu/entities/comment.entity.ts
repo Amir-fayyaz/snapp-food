@@ -8,6 +8,9 @@ export class CommentEntity extends Base {
   @Column({ type: 'varchar', nullable: false })
   comment: string;
 
+  @Column({ type: 'double' })
+  score: number;
+
   @ManyToOne(() => MenuEntity, (menu) => menu.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'food' })
   food: MenuEntity;

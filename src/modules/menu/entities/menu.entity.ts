@@ -1,8 +1,9 @@
 import { Base } from 'src/common/abstracts/baseEntity';
 import { EntityName } from 'src/common/enums/entityName.enum';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { TypeEntity } from './type.entity';
+import { CommentEntity } from './comment.entity';
 
 @Entity(EntityName.Menu)
 export class MenuEntity extends Base {
@@ -25,11 +26,16 @@ export class MenuEntity extends Base {
   score: number;
 
   //relations
-  @ManyToOne(() => SupplierEntity, (supplier) => supplier.menu)
+  @ManyToOne(() => SupplierEntity, (supplier) => supplier.menu, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'supplier' })
   supplier: SupplierEntity;
 
   @ManyToOne(() => TypeEntity, (type) => type.menu)
   @JoinColumn({ name: 'type' })
   type: TypeEntity;
+
+  @OneToMany(() => CommentEntity, (comment) => comment.food)
+  comments: CommentEntity[];
 }

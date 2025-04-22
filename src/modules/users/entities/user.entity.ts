@@ -2,6 +2,7 @@ import { Base } from 'src/common/abstracts/baseEntity';
 import { EntityName } from 'src/common/enums/entityName.enum';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AddressEntity } from './address.entity';
+import { CommentEntity } from 'src/modules/menu/entities/comment.entity';
 
 @Entity(EntityName.User)
 export class UserEntity extends Base {
@@ -29,4 +30,7 @@ export class UserEntity extends Base {
   //relations
   @OneToMany(() => AddressEntity, (address) => address.user)
   addressList: AddressEntity[];
+
+  @OneToMany(() => CommentEntity, (comment) => comment.user)
+  comments: CommentEntity[];
 }

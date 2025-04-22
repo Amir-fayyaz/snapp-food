@@ -3,6 +3,7 @@ import { config } from 'dotenv';
 import { SupplierOtpEntity } from 'src/modules/auth/entities/supplier-otp.entity';
 import { OtpEntity } from 'src/modules/auth/entities/user-otp.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
+import { CommentEntity } from 'src/modules/menu/entities/comment.entity';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 import { TypeEntity } from 'src/modules/menu/entities/type.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
@@ -27,6 +28,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     SupplierOtpEntity,
     TypeEntity,
     MenuEntity,
+    CommentEntity,
   ],
   port: Number(DB_PORT),
   synchronize: true,

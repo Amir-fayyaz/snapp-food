@@ -69,4 +69,13 @@ export class SupplierService {
       where: { manager_mobile: mobile },
     });
   }
+
+  public async findSupplierById(id: number) {
+    const supplier = await this.Supplier_Repository.findOne({ where: { id } });
+
+    if (!supplier)
+      throw new NotFoundException('There is no supplier with this id');
+
+    return supplier;
+  }
 }

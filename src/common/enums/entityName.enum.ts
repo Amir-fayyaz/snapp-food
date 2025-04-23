@@ -5,7 +5,7 @@ export enum EntityName {
   UserOtp = 'user-otp',
   Supplier = 'supplier',
   SupplierOtp = 'supplier-otp',
-  Type = 'type',
+  MenuGroup = 'menu-group',
   Menu = 'menu',
   Comment = 'comment',
 }

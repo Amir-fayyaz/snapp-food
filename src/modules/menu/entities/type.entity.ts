@@ -4,7 +4,7 @@ import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { MenuEntity } from './menu.entity';
 
-@Entity(EntityName.Type)
+@Entity(EntityName.MenuGroup)
 export class TypeEntity extends Base {
   @Column({ type: 'varchar' })
   title: string;

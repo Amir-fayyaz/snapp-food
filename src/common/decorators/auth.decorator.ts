@@ -3,7 +3,11 @@ import { ApiBearerAuth, ApiHeader } from '@nestjs/swagger';
 import { SupplierGuard } from 'src/modules/auth/guards/supplier.guard';
 
 export function UserAuth() {
-  return applyDecorators(ApiBearerAuth('Authorizaion'), UseGuards());
+  return applyDecorators(
+    ApiBearerAuth('Authorizaion'),
+    ApiHeader({ name: 'Authorization', required: true }),
+    UseGuards(),
+  );
 }
 
 export function SupplierAuth() {

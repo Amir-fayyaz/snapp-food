@@ -33,7 +33,10 @@ export class SupplierGuard implements CanActivate {
   }
 
   private extractToken(request: Request): string {
-    const [type, token] = request.headers.authorization?.split(' ');
+    if (!request.headers.authorization)
+      throw new UnauthorizedException('Invalid token');
+
+    const [type, token] = request.headers?.authorization?.split(' ');
 
     if (type !== 'Bearer' || !token) throw new UnauthorizedException();
 

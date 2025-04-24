@@ -1,5 +1,5 @@
 import { applyDecorators, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiHeader } from '@nestjs/swagger';
 import { SupplierGuard } from 'src/modules/auth/guards/supplier.guard';
 
 export function UserAuth() {
@@ -8,7 +8,8 @@ export function UserAuth() {
 
 export function SupplierAuth() {
   return applyDecorators(
-    ApiBearerAuth('Authorizaion'),
+    ApiBearerAuth(),
+    ApiHeader({ name: 'Authorization', required: true }),
     UseGuards(SupplierGuard),
   );
 }

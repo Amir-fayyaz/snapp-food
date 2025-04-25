@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { MenuTypeSupplierService } from '../services/menu-type.supplier.service';
 import { CreateMenuTypeDto } from '../dto/menu-type/create-menuType.dto';
 import { SupplierAuth } from 'src/common/decorators/auth.decorator';
@@ -6,6 +13,8 @@ import { getUser } from 'src/common/decorators/getusers.decorator';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Role } from 'src/common/decorators/role.decorator';
+import { UpdateMenuTypeDto } from '../dto/menu-type/update-menuType.dto';
+import { ISupplier } from 'src/common/types/request-user.types';
 
 @Controller('api/v1/supplier/menu-type')
 @ApiTags('supplier menu-type')
@@ -19,9 +28,28 @@ export class MenuTypeSupplierController {
   @Role(['supplier'])
   async createMenuType(
     @Body() data: CreateMenuTypeDto,
-    @getUser('supplier') supplier: any,
+    @getUser('supplier') supplier: ISupplier,
   ) {
     console.log(supplier);
-    return await this.MenuTypeService.createMenuType(data, supplier.id);
+    return await this.MenuTypeService.createMenuType(
+      data,
+      supplier.supplier_id,
+    );
+  }
+
+  @Put(':id')
+  @ApiOperation({ summary: 'For update menu-type by id' })
+  @ApiBody({ type: UpdateMenuTypeDto })
+  @Role(['supplier'])
+  async updateMenuType(
+    @Body() data: UpdateMenuTypeDto,
+    @Param('id', ParseIntPipe) id: number,
+    @getUser() supplier: ISupplier,
+  ) {
+    return await this.MenuTypeService.updateMenuType(
+      data,
+      id,
+      supplier.supplier_id,
+    );
   }
 }

@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TypeEntity } from '../../entities/type.entity';
 import { Repository } from 'typeorm';
 import { CreateMenuTypeDto } from '../dto/menu-type/create-menuType.dto';
 import { SupplierService } from 'src/modules/supplier/supplier.service';
+import { UpdateMenuTypeDto } from '../dto/menu-type/update-menuType.dto';
 
 @Injectable()
 export class MenuTypeSupplierService {
@@ -23,5 +24,24 @@ export class MenuTypeSupplierService {
     });
 
     return await this.Type_Repository.save(newMenuType);
+  }
+
+  public async updateMenuType(
+    data: UpdateMenuTypeDto,
+    id: number,
+    supplier_id: number,
+  ) {
+    const menuType = await this.Type_Repository.findOne({
+      where: { id, supplier: { id: supplier_id } },
+      relations: { supplier: true },
+    });
+
+    if (!menuType) throw new NotFoundException();
+
+    menuType.title = data.title;
+
+    await this.Type_Repository.save(menuType);
+
+    return { success: true };
   }
 }

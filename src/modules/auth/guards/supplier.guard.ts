@@ -23,8 +23,8 @@ export class SupplierGuard implements CanActivate {
 
     const supplier = await this.validateToken(token);
 
-    request.supplier = {
-      id: supplier.id,
+    request.user = {
+      supplier_id: supplier.id,
       mobile: supplier.manager_mobile,
       role: 'supplier',
     };

@@ -1,10 +1,12 @@
 import {
   Body,
   Controller,
+  Get,
   Param,
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { MenuTypeSupplierService } from '../services/menu-type.supplier.service';
 import { CreateMenuTypeDto } from '../dto/menu-type/create-menuType.dto';
@@ -15,6 +17,8 @@ import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Role } from 'src/common/decorators/role.decorator';
 import { UpdateMenuTypeDto } from '../dto/menu-type/update-menuType.dto';
 import { ISupplier } from 'src/common/types/request-user.types';
+import { Pagination } from 'src/common/decorators/pagination.decorator';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller('api/v1/supplier/menu-type')
 @ApiTags('supplier menu-type')
@@ -49,6 +53,19 @@ export class MenuTypeSupplierController {
     return await this.MenuTypeService.updateMenuType(
       data,
       id,
+      supplier.supplier_id,
+    );
+  }
+
+  @Pagination()
+  @Role(['supplier'])
+  @Get()
+  async getMenuTypes(
+    @Query() PaginationDto: PaginationDto,
+    @getUser() supplier: ISupplier,
+  ) {
+    return await this.MenuTypeService.getMenuTypes(
+      PaginationDto,
       supplier.supplier_id,
     );
   }

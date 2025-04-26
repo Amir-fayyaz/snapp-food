@@ -5,6 +5,8 @@ import { Repository } from 'typeorm';
 import { CreateMenuTypeDto } from '../dto/menu-type/create-menuType.dto';
 import { SupplierService } from 'src/modules/supplier/supplier.service';
 import { UpdateMenuTypeDto } from '../dto/menu-type/update-menuType.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { Pagination } from 'src/common/utility/pagination.utilty';
 
 @Injectable()
 export class MenuTypeSupplierService {
@@ -43,5 +45,24 @@ export class MenuTypeSupplierService {
     await this.Type_Repository.save(menuType);
 
     return { success: true };
+  }
+
+  public async getMenuTypes(paginationDto: PaginationDto, supplier_id: number) {
+    const pagination = Pagination(paginationDto);
+
+    const menuTypes = await this.Type_Repository.find({
+      where: { supplier: { id: supplier_id } },
+      skip: pagination.skip,
+      take: pagination.take,
+      relations: {
+        supplier: true,
+      },
+    });
+
+    return {
+      page: paginationDto.page,
+      menuTypes,
+      count: menuTypes.length,
+    };
   }
 }

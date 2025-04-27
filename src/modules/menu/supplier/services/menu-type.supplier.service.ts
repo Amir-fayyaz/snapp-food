@@ -65,4 +65,13 @@ export class MenuTypeSupplierService {
       count: menuTypes.length,
     };
   }
+
+  //for exports
+  public async getMenuTypeById(id: number) {
+    const menuType = await this.Type_Repository.findOneBy({ id });
+
+    if (!menuType) throw new NotFoundException('No menu-type with this id');
+
+    return menuType;
+  }
 }

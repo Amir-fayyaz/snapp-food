@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsNumber, IsString, Length } from 'class-validator';
+import {
+  IsInt,
+  IsNumber,
+  IsNumberString,
+  IsString,
+  Length,
+} from 'class-validator';
 
 export class CreateMenuDto {
   @ApiProperty()
@@ -11,11 +17,11 @@ export class CreateMenuDto {
   image: Express.Multer.File;
 
   @ApiProperty({ example: 19.5 })
-  @IsNumber()
+  @IsNumberString()
   price: number;
 
   @ApiProperty({ maximum: 100, minimum: 0, example: 10 })
-  @IsNumber()
+  @IsNumberString()
   discount: number;
 
   @ApiProperty()
@@ -24,10 +30,10 @@ export class CreateMenuDto {
   description: string;
 
   @ApiProperty({ minimum: 0, maximum: 5, example: 2, default: 0 })
-  @IsNumber()
+  @IsNumberString()
   score: number;
 
   @ApiProperty()
-  @IsInt()
+  @IsNumberString()
   type_id: number;
 }

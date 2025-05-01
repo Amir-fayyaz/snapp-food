@@ -56,6 +56,7 @@ export class MenuTypeSupplierService {
       take: pagination.take,
       relations: {
         supplier: true,
+        menu: true,
       },
     });
 
@@ -65,6 +66,8 @@ export class MenuTypeSupplierService {
       count: menuTypes.length,
     };
   }
+
+  //gets
 
   //for exports
   public async getMenuTypeById(id: number) {

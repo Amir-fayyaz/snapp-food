@@ -8,15 +8,25 @@ import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { SupplierService } from 'src/modules/supplier/supplier.service';
 import { SupplierTokenPaylod } from '../types/supplier-TokenPaylod.type';
+import { Reflector } from '@nestjs/core';
+import { SKIP_KEY } from 'src/common/decorators/skipAuth.decorator';
 
 @Injectable()
 export class SupplierGuard implements CanActivate {
   constructor(
     private readonly SupplierService: SupplierService,
     private readonly JwtService: JwtService,
+    private readonly reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
+    const isSkippedAuth = this.reflector.get<Boolean>(
+      SKIP_KEY,
+      context.getHandler(),
+    );
+
+    if (isSkippedAuth) return true;
+
     const request: Request = context.switchToHttp().getRequest<Request>();
 
     const token = this.extractToken(request);

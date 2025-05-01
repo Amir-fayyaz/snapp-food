@@ -7,7 +7,7 @@ import { SupplierService } from 'src/modules/supplier/supplier.service';
 import { CreateMenuDto } from '../dto/menu/create-menu.dto';
 import { S3Service } from 'src/modules/s3/s3.service';
 import { StorageFolderName } from 'src/common/enums/storage-folderNames.enum';
-import { UpdateMenuDto } from '../dto/menu/update-menu.dto';
+import { UpdateFoodDto } from '../dto/menu/update-menu.dto';
 
 @Injectable()
 export class MenuSupplierService {
@@ -49,21 +49,23 @@ export class MenuSupplierService {
   }
 
   public async updateFood(
-    data: UpdateMenuDto,
+    data: UpdateFoodDto,
+    image: Express.Multer.File,
     id: number,
     supplier_id: number,
   ) {
-    const { description, discount, image, name, price, score, type_id } = data;
+    // image & type_id is optional
+    //default of score & discount is 0
+    const { description, discount, name, price, score, type_id } = data;
 
-    const Food = await this.Menu_Repository.findOne({
-      where: { id, supplier: { id: supplier_id } },
-    });
+    const food = await this.Menu_Repository.findOneBy({ id });
 
-    if (!Food) throw new NotFoundException('Not found menu with this id');
+    if (!food) throw new NotFoundException('not found menu with this id');
 
-    //change of image
+    const supplier = await this.supplierService.findSupplierById(supplier_id);
+
     if (image) {
-      await this.S3Service.deleteFile(Food.image);
+      await this.S3Service.deleteFile(food.image);
       const { key } = await this.S3Service.uploadFile(
         image,
         StorageFolderName.Image,
@@ -76,11 +78,12 @@ export class MenuSupplierService {
           { id },
           {
             description,
-            discount,
-            image: key,
+            discount: discount || 0,
             name,
             price,
+            image: key,
             score: score || 0,
+            supplier,
             type,
           },
         );
@@ -89,7 +92,15 @@ export class MenuSupplierService {
       } else {
         await this.Menu_Repository.update(
           { id },
-          { description, discount, image: key, name, price, score: score || 0 },
+          {
+            description,
+            discount: discount || 0,
+            name,
+            price,
+            image: key,
+            score: score || 0,
+            supplier,
+          },
         );
 
         return { success: true };
@@ -100,16 +111,32 @@ export class MenuSupplierService {
 
         await this.Menu_Repository.update(
           { id },
-          { description, discount, name, price, score: score || 0, type },
+          {
+            description,
+            discount: discount || 0,
+            name,
+            price,
+            score: score || 0,
+            supplier,
+            type,
+          },
         );
 
         return { success: true };
       } else {
         await this.Menu_Repository.update(
           { id },
-          { description, discount, name, price, score: score || 0 },
+          {
+            description,
+            discount: discount || 0,
+            name,
+            price,
+            score: score || 0,
+            supplier,
+          },
         );
 
+        console.log(4);
         return { success: true };
       }
     }

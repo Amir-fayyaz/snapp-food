@@ -1,35 +1,32 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumberString, IsOptional, IsString, Length } from 'class-validator';
+import { IsNumberString, IsOptional, IsString } from 'class-validator';
 
-export class UpdateMenuDto {
-  @ApiProperty()
+export class UpdateFoodDto {
+  @ApiProperty({ example: 'name 1' })
   @IsString()
-  @Length(3, 50)
   name: string;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ type: 'string', format: 'binary', required: false })
   @IsOptional()
   image: Express.Multer.File;
 
-  @ApiProperty({ example: 19.5 })
+  @ApiProperty({ type: 'number', example: 14.5 })
   @IsNumberString()
   price: number;
 
-  @ApiProperty({ maximum: 100, minimum: 0, example: 10 })
+  @ApiProperty({ type: 'number', example: 5, default: 0 })
   @IsNumberString()
   discount: number;
 
-  @ApiProperty()
+  @ApiProperty({ type: 'string', example: 'random description' })
   @IsString()
-  @Length(3, 150)
   description: string;
 
-  @ApiProperty({ minimum: 0, maximum: 5, example: 2, default: 0 })
+  @ApiProperty({ type: 'number', maximum: 5, minimum: 0, example: 3 })
   @IsNumberString()
   score: number;
 
-  @ApiProperty({ required: false })
+  @ApiProperty({ type: 'number', example: 2, required: false })
   @IsOptional()
-  @IsNumberString()
   type_id: number;
 }

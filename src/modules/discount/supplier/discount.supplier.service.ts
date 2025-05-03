@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DiscountEntity } from '../entites/discount.entity';
 import { Repository } from 'typeorm';
@@ -110,6 +114,20 @@ export class DiscountSupplierService {
         return await this.discount_Repository.save(newDiscount);
       }
     }
+  }
+
+  public async deleteDiscount(code: string, supplierId: number) {
+    const deleteResult = await this.discount_Repository.delete({
+      code,
+      supplier: { id: supplierId },
+    });
+
+    if (deleteResult.affected === 0)
+      throw new NotFoundException(
+        'no discount-coupon with this code for you !',
+      );
+
+    return { success: true };
   }
 
   // for exports

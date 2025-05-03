@@ -27,6 +27,9 @@ export class DiscountEntity extends Base {
   @Column({ default: true, type: 'boolean' })
   active: Boolean;
 
+  @Column({ type: 'double', nullable: true })
+  food_range: number;
+
   //relations
 
   @ManyToOne(() => SupplierEntity, (supplier) => supplier.discounts)

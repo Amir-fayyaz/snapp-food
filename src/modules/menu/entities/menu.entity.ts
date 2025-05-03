@@ -4,6 +4,7 @@ import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { TypeEntity } from './type.entity';
 import { CommentEntity } from './comment.entity';
+import { BasketEntity } from 'src/modules/basket/entities/basket.entity';
 
 @Entity(EntityName.Menu)
 export class MenuEntity extends Base {
@@ -38,4 +39,7 @@ export class MenuEntity extends Base {
 
   @OneToMany(() => CommentEntity, (comment) => comment.food)
   comments: CommentEntity[];
+
+  @OneToMany(() => BasketEntity, (basket) => basket.food)
+  baskets: BasketEntity[];
 }

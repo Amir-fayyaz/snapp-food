@@ -3,6 +3,7 @@ import { EntityName } from 'src/common/enums/entityName.enum';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { AddressEntity } from './address.entity';
 import { CommentEntity } from 'src/modules/menu/entities/comment.entity';
+import { BasketEntity } from 'src/modules/basket/entities/basket.entity';
 
 @Entity(EntityName.User)
 export class UserEntity extends Base {
@@ -33,4 +34,7 @@ export class UserEntity extends Base {
 
   @OneToMany(() => CommentEntity, (comment) => comment.user)
   comments: CommentEntity[];
+
+  @OneToMany(() => BasketEntity, (basket) => basket.user)
+  baskets: BasketEntity[];
 }

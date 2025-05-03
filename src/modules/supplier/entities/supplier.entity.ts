@@ -5,6 +5,7 @@ import { City } from '../enums/city.enum';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { TypeEntity } from 'src/modules/menu/entities/type.entity';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
+import { DiscountEntity } from 'src/modules/basket/entities/discount.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends Base {
@@ -46,4 +47,7 @@ export class SupplierEntity extends Base {
 
   @OneToMany(() => MenuEntity, (menu) => menu.supplier)
   menu: MenuEntity[];
+
+  @OneToMany(() => DiscountEntity, (discount) => discount.supplier)
+  discounts: DiscountEntity[];
 }

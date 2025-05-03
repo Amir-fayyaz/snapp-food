@@ -131,4 +131,11 @@ export class DiscountSupplierService {
   }
 
   // for exports
+  public async findCouponByCode(code: string) {
+    const coupon = await this.discount_Repository.findOne({ where: { code } });
+
+    if (!coupon) throw new NotFoundException('Invalid discount-coupon');
+
+    return coupon;
+  }
 }

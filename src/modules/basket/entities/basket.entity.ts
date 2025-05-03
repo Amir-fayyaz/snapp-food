@@ -3,8 +3,8 @@ import { EntityName } from 'src/common/enums/entityName.enum';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { DiscountEntity } from './discount.entity';
 import { BasketDiscountType } from '../enums/basket-discount.type';
+import { DiscountEntity } from 'src/modules/discount/entites/discount.entity';
 
 @Entity(EntityName.Basket)
 export class BasketEntity extends Base {

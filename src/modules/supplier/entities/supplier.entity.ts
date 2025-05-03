@@ -5,7 +5,7 @@ import { City } from '../enums/city.enum';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { TypeEntity } from 'src/modules/menu/entities/type.entity';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
-import { DiscountEntity } from 'src/modules/basket/entities/discount.entity';
+import { DiscountEntity } from 'src/modules/discount/entites/discount.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends Base {

@@ -1,8 +1,8 @@
 import { Base } from 'src/common/abstracts/baseEntity';
 import { EntityName } from 'src/common/enums/entityName.enum';
+import { BasketEntity } from 'src/modules/basket/entities/basket.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
-import { BasketEntity } from './basket.entity';
 
 @Entity(EntityName.Discount)
 export class DiscountEntity extends Base {

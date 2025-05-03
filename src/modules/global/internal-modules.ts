@@ -4,6 +4,8 @@ import { CategoryModule } from '../category/category.module';
 import { S3Module } from '../s3/s3.module';
 import { SupplierModule } from '../supplier/supplier.module';
 import { MenuModule } from '../menu/menu.module';
+import { DiscountModule } from '../discount/discount.module';
+import { BasketModule } from '../basket/basket.module';
 
 export const InternalModules = [
   CategoryModule,
@@ -15,4 +17,6 @@ export const InternalModules = [
   }),
   SupplierModule,
   MenuModule,
+  DiscountModule,
+  BasketModule,
 ];

@@ -8,4 +8,6 @@ export enum EntityName {
   MenuGroup = 'menu-group',
   Menu = 'menu',
   Comment = 'comment',
+  Basket = 'basket',
+  Discount = 'discount',
 }

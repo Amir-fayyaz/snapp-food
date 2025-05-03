@@ -2,6 +2,8 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { config } from 'dotenv';
 import { SupplierOtpEntity } from 'src/modules/auth/entities/supplier-otp.entity';
 import { OtpEntity } from 'src/modules/auth/entities/user-otp.entity';
+import { BasketEntity } from 'src/modules/basket/entities/basket.entity';
+import { DiscountEntity } from 'src/modules/basket/entities/discount.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { CommentEntity } from 'src/modules/menu/entities/comment.entity';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
@@ -29,6 +31,8 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     TypeEntity,
     MenuEntity,
     CommentEntity,
+    DiscountEntity,
+    BasketEntity,
   ],
   port: Number(DB_PORT),
   synchronize: true,

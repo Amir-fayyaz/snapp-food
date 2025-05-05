@@ -31,4 +31,8 @@ export class UserAppService {
       where: { invite_code: inviteCode },
     });
   }
+
+  public async getUserById(id: number) {
+    return await this.User_Repository.findOneBy({ id });
+  }
 }

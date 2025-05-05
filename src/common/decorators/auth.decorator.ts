@@ -8,7 +8,7 @@ export function UserAuth() {
   return applyDecorators(
     ApiBearerAuth('Authorizaion'),
     ApiHeader({ name: 'Authorization', required: true }),
-    UseGuards(RoleGuard, UserGuard),
+    UseGuards(UserGuard, RoleGuard),
   );
 }
 

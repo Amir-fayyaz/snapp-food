@@ -12,7 +12,7 @@ import { SupplierOtpEntity } from '../entities/supplier-otp.entity';
 import * as bcrypt from 'bcrypt';
 import { randomInt } from 'crypto';
 import { generateCode } from 'src/common/types/generateCode.type';
-import { SignInDto } from './dto/signIn.dto';
+import { SignInnDto } from './dto/signIn.dto';
 import { JwtService } from '@nestjs/jwt';
 import { CategoryAppService } from 'src/modules/category/client/category.client.service';
 import { config } from 'dotenv';
@@ -134,7 +134,7 @@ export class AuthSupplierService {
     return newOtpCode.otp;
   }
 
-  public async login(data: SignInDto) {
+  public async login(data: SignInnDto) {
     await this.verifyOtp(data.manager_mobile, data.otp_code);
 
     const supplier = await this.SupplierService.findSupplierByMobile(

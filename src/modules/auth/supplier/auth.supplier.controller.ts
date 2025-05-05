@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { AuthSupplierService } from './auth.supplier.service';
 import { SignUpDto } from './dto/signUp.dto';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { SignInDto } from './dto/signIn.dto';
+import { SignInnDto } from './dto/signIn.dto';
 
 @Controller('api/v1/auth/supplier')
 @ApiTags('Auth-supplier')
@@ -18,8 +18,8 @@ export class AuthSupplierController {
 
   @Post('login')
   @ApiOperation({ summary: 'For login/register to acount' })
-  @ApiBody({ type: SignInDto })
-  async login(@Body() data: SignInDto) {
+  @ApiBody({ type: SignInnDto })
+  async login(@Body() data: SignInnDto) {
     return await this.AuthService.login(data);
   }
 }

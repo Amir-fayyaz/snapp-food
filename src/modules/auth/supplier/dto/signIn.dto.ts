@@ -10,7 +10,7 @@ import {
 } from 'class-validator';
 import { City } from 'src/modules/supplier/enums/city.enum';
 
-export class SignInDto {
+export class SignInnDto {
   @ApiProperty({ example: 'amir' })
   @IsString()
   @Length(3, 50)

@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BasketEntity } from '../entities/basket.entity';
 import { Repository } from 'typeorm';
@@ -6,6 +10,7 @@ import { MenuAppService } from 'src/modules/menu/client/services/menu.client.ser
 import { AddToBasketDto } from './dto/addToBasket.dto';
 import { UserAppService } from 'src/modules/users/client/user.client.service';
 import { DeleteFromBasketDto } from './dto/deleteFromBasket.dto';
+import { DiscountAppService } from 'src/modules/discount/client/discount.client.service';
 
 @Injectable()
 export class BasketAppService {
@@ -14,6 +19,7 @@ export class BasketAppService {
     private readonly Basket_Repository: Repository<BasketEntity>,
     private readonly MenuService: MenuAppService,
     private readonly UserService: UserAppService,
+    private readonly DiscountService: DiscountAppService,
   ) {}
 
   //public methods
@@ -54,5 +60,26 @@ export class BasketAppService {
       return { success: true };
     }
     throw new NotFoundException();
+  }
+
+  public async addDiscountCoupon(code: string, userId: number) {
+    const discountCoupon = await this.DiscountService.findDiscountByCode(code);
+
+    const basket = await this.Basket_Repository.find({
+      where: { user: { id: userId } },
+    });
+
+    basket.forEach((basket) => {
+      if (basket.discount)
+        throw new BadRequestException('Discount added to basket before !');
+    });
+
+    basket[basket.length - 1].discount = discountCoupon;
+
+    await this.Basket_Repository.save(basket);
+
+    return {
+      copoun: discountCoupon,
+    };
   }
 }

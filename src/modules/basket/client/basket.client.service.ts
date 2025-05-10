@@ -5,13 +5,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BasketEntity } from '../entities/basket.entity';
-import { Repository } from 'typeorm';
+import { IsNull, Not, Repository } from 'typeorm';
 import { MenuAppService } from 'src/modules/menu/client/services/menu.client.service';
 import { AddToBasketDto } from './dto/addToBasket.dto';
 import { UserAppService } from 'src/modules/users/client/user.client.service';
 import { DeleteFromBasketDto } from './dto/deleteFromBasket.dto';
 import { DiscountAppService } from 'src/modules/discount/client/discount.client.service';
 import { DiscountBasketDto } from './dto/discount.dto';
+import { DiscountEntity } from 'src/modules/discount/entites/discount.entity';
 
 @Injectable()
 export class BasketAppService {
@@ -21,9 +22,27 @@ export class BasketAppService {
     private readonly MenuService: MenuAppService,
     private readonly UserService: UserAppService,
     private readonly DiscountService: DiscountAppService,
-    private readonly userService: UserAppService,
   ) {}
 
+  //private methods
+  private async CheckDiscountExpire(discount: DiscountEntity) {
+    if (
+      discount?.expireIn &&
+      discount?.expireIn.getTime() <= new Date().getTime()
+    ) {
+      throw new BadRequestException('Discount coupon has expired');
+    }
+  }
+
+  private async CheckDiscountLimit(discount: DiscountEntity) {
+    if (discount.limit && discount.limit <= discount.usage)
+      throw new BadRequestException('Capacity of this code is full');
+  }
+
+  private async ChackDiscountActive(discount: DiscountEntity) {
+    if (!discount.active)
+      throw new BadRequestException('discount-code is not active');
+  }
   //public methods
   public async addToBasket(data: AddToBasketDto, userId: number) {
     const food = await this.MenuService.getFoodById(data.foodId);
@@ -77,6 +96,10 @@ export class BasketAppService {
     const discount = await this.DiscountService.findDiscountByCode(code);
     const user = await this.UserService.getUserById(userId);
 
+    await this.ChackDiscountActive(discount);
+    await this.CheckDiscountExpire(discount);
+    await this.CheckDiscountLimit(discount);
+
     const userDiscountBasket = await this.Basket_Repository.findOneBy({
       discount: { id: discount.id },
       user: { id: userId },
@@ -111,6 +134,22 @@ export class BasketAppService {
       });
 
       if (!userBasket) throw new BadRequestException('Invalid discount-code');
+    } else if (!discount.supplier?.id) {
+      const generalDiscount = await this.Basket_Repository.findOne({
+        relations: { discount: true },
+        where: {
+          user: { id: userId },
+          discount: {
+            id: Not(IsNull()),
+            supplier: {
+              id: IsNull(),
+            },
+          },
+        },
+      });
+
+      if (generalDiscount)
+        throw new BadRequestException('already used general discount !');
     }
 
     await this.Basket_Repository.insert({

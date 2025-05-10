@@ -6,6 +6,7 @@ import { SupplierModule } from '../supplier/supplier.module';
 import { MenuModule } from '../menu/menu.module';
 import { DiscountModule } from '../discount/discount.module';
 import { BasketModule } from '../basket/basket.module';
+import { OrderModule } from '../order/order.module';
 
 export const InternalModules = [
   CategoryModule,
@@ -19,4 +20,5 @@ export const InternalModules = [
   MenuModule,
   DiscountModule,
   BasketModule,
+  OrderModule,
 ];

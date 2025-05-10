@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { BasketAppService } from './basket.client.service';
 import { UserAuth } from 'src/common/decorators/auth.decorator';
@@ -58,5 +58,15 @@ export class BasketAppController {
     @getUser() user: IUser,
   ) {
     return await this.BasketService.removeDiscount(data, user.user_id);
+  }
+
+  //GET
+  @Get()
+  @Role(['user'])
+  @ApiOperation({
+    summary: 'For get user-basket with all discounts & totalPrice',
+  })
+  async getBasket(@getUser() user: IUser) {
+    return await this.BasketService.getBasket(user.user_id);
   }
 }

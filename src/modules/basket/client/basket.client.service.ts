@@ -11,6 +11,7 @@ import { AddToBasketDto } from './dto/addToBasket.dto';
 import { UserAppService } from 'src/modules/users/client/user.client.service';
 import { DeleteFromBasketDto } from './dto/deleteFromBasket.dto';
 import { DiscountAppService } from 'src/modules/discount/client/discount.client.service';
+import { DiscountBasketDto } from './dto/discount.dto';
 
 @Injectable()
 export class BasketAppService {
@@ -20,6 +21,7 @@ export class BasketAppService {
     private readonly MenuService: MenuAppService,
     private readonly UserService: UserAppService,
     private readonly DiscountService: DiscountAppService,
+    private readonly userService: UserAppService,
   ) {}
 
   //public methods
@@ -62,24 +64,50 @@ export class BasketAppService {
     throw new NotFoundException();
   }
 
-  public async addDiscountCoupon(code: string, userId: number) {
-    const discountCoupon = await this.DiscountService.findDiscountByCode(code);
-
-    const basket = await this.Basket_Repository.find({
+  public async getBasketForUser(userId: number) {
+    const BasketItem = await this.Basket_Repository.find({
       where: { user: { id: userId } },
+      relations: { discount: true, food: { supplier: true } },
     });
+  }
 
-    basket.forEach((basket) => {
-      if (basket.discount)
-        throw new BadRequestException('Discount added to basket before !');
+  //Discounts
+  public async addDiscountToBasket(data: DiscountBasketDto, userId: number) {
+    const { code } = data;
+    const discount = await this.DiscountService.findDiscountByCode(code);
+    const user = await this.UserService.getUserById(userId);
+
+    if (discount.supplier?.id) {
+      const discountOfSupplier = await this.Basket_Repository.findOne({
+        relations: { discount: true },
+        where: { discount: { supplier: { id: discount.supplier.id } } },
+      });
+
+      if (discountOfSupplier)
+        throw new BadRequestException(
+          'You can not use discount-coupon again !',
+        );
+      const userBasket = await this.Basket_Repository.findOne({
+        relations: { food: true },
+        where: {
+          food: {
+            supplier: {
+              id: discount.supplier.id,
+            },
+          },
+        },
+      });
+
+      if (!userBasket) throw new BadRequestException('Invalid discount-code');
+    }
+
+    await this.Basket_Repository.insert({
+      discount,
+      user,
     });
-
-    basket[basket.length - 1].discount = discountCoupon;
-
-    await this.Basket_Repository.save(basket);
 
     return {
-      copoun: discountCoupon,
+      message: 'You used your discount-coupon successfully',
     };
   }
 }

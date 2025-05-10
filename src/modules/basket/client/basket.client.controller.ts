@@ -7,6 +7,7 @@ import { getUser } from 'src/common/decorators/getusers.decorator';
 import { IUser } from 'src/common/types/request-user.types';
 import { Role } from 'src/common/decorators/role.decorator';
 import { DeleteFromBasketDto } from './dto/deleteFromBasket.dto';
+import { DiscountBasketDto } from './dto/discount.dto';
 
 @Controller('api/v1/client/basket')
 @ApiTags('client-basket')
@@ -33,5 +34,17 @@ export class BasketAppController {
     @getUser() user: IUser,
   ) {
     return await this.BasketService.removeFromBasket(data, user.user_id);
+  }
+
+  //POST
+  @Post('discount')
+  @Role(['user'])
+  @ApiOperation({ summary: 'For add discount-coupon to basket' })
+  @ApiBody({ type: DiscountBasketDto })
+  async addDiscountToBasket(
+    @Body() data: DiscountBasketDto,
+    @getUser() user: IUser,
+  ) {
+    return await this.BasketService.addDiscountToBasket(data, user.user_id);
   }
 }

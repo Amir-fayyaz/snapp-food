@@ -77,10 +77,21 @@ export class BasketAppService {
     const discount = await this.DiscountService.findDiscountByCode(code);
     const user = await this.UserService.getUserById(userId);
 
+    const userDiscountBasket = await this.Basket_Repository.findOneBy({
+      discount: { id: discount.id },
+      user: { id: userId },
+    });
+
+    if (userDiscountBasket) {
+      throw new BadRequestException('You already used this discount-coupon');
+    }
     if (discount.supplier?.id) {
       const discountOfSupplier = await this.Basket_Repository.findOne({
         relations: { discount: true },
-        where: { discount: { supplier: { id: discount.supplier.id } } },
+        where: {
+          discount: { supplier: { id: discount.supplier.id } },
+          user: { id: userId },
+        },
       });
 
       if (discountOfSupplier)
@@ -90,6 +101,7 @@ export class BasketAppService {
       const userBasket = await this.Basket_Repository.findOne({
         relations: { food: true },
         where: {
+          user: { id: userId },
           food: {
             supplier: {
               id: discount.supplier.id,

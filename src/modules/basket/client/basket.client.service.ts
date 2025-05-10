@@ -110,4 +110,24 @@ export class BasketAppService {
       message: 'You used your discount-coupon successfully',
     };
   }
+
+  public async removeDiscount(data: DiscountBasketDto, userId: number) {
+    const { code } = data;
+    const discount = await this.DiscountService.findDiscountByCode(code);
+
+    const basketDiscount = await this.Basket_Repository.findOne({
+      where: {
+        discount: { id: discount.id },
+        user: { id: userId },
+      },
+    });
+
+    if (!basketDiscount) throw new BadRequestException('Invalid discount-code');
+
+    await this.Basket_Repository.remove(basketDiscount);
+
+    return {
+      message: 'discount-coupon deleted successfully',
+    };
+  }
 }

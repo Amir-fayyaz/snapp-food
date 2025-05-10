@@ -181,4 +181,113 @@ export class BasketAppService {
       message: 'discount-coupon deleted successfully',
     };
   }
+
+  public async getBasket(userId: number) {
+    const BasketItems = await this.Basket_Repository.find({
+      relations: {
+        discount: true,
+        food: {
+          supplier: true,
+        },
+      },
+      where: { user: { id: userId } },
+    });
+
+    const foods = BasketItems.filter((item) => item?.food?.id);
+    const supplierDiscounts = BasketItems.filter(
+      (item) => item?.discount?.supplier?.id,
+    );
+    const genealDiscount = BasketItems.find(
+      (item) => item?.discount?.id && !item?.discount?.supplier?.id,
+    );
+
+    let totalAmount = 0,
+      totalDiscountAmount = 0;
+    let foodItems = [];
+
+    for (const item of foods) {
+      let discountAmount = 0;
+      let discountCode: string = '';
+      const { food, count } = item;
+      const supplierId = food.supplier?.id;
+      let foodPrice = food.price;
+
+      if (food.discount > 0 && food.is_active) {
+        discountAmount += foodPrice * (food.discount / 100);
+        foodPrice = foodPrice - foodPrice * (food.discount / 100);
+      }
+
+      const discountItems = supplierDiscounts.find(
+        ({ discount }) => discount.supplier.id === supplierId,
+      );
+
+      if (discountItems) {
+        const {
+          discount: { active, limit, usage, amount, percent, code },
+        } = discountItems;
+
+        if (active) {
+          if (!limit || (limit && limit > usage)) {
+            discountCode = code;
+
+            if (percent && percent > 0) {
+              discountAmount += foodPrice * (percent / 100);
+              foodPrice = foodPrice - foodPrice * (food.discount / 100);
+            } else if (amount && amount > 0) {
+              discountAmount += amount;
+              foodPrice = amount > foodPrice ? 0 : foodPrice - amount;
+            }
+          }
+        }
+      }
+
+      totalAmount += foodPrice * count;
+      totalDiscountAmount += discountAmount;
+      foodItems.push({
+        name: food.name,
+        description: food.description,
+        count,
+        image: food.image,
+        price: food.price,
+        total_amount: food.price * count,
+        discountAmount,
+        paymentAmount: food.price * count - discountAmount,
+        discountCode,
+        supplierName: food?.supplier?.store_name,
+        supplierId,
+      });
+    }
+
+    let genealDetailDicount = {};
+    if (genealDiscount?.discount?.active) {
+      const { discount } = genealDiscount;
+
+      if (discount?.limit && discount.limit > discount.usage) {
+        let discountAmount = 0;
+
+        if (discount?.percent > 0) {
+          discountAmount = totalAmount * (discountAmount / 100);
+        } else if (discount?.amount) {
+          discountAmount = discount.amount;
+        }
+
+        totalAmount =
+          discountAmount > totalAmount ? 0 : totalAmount - discountAmount;
+        totalDiscountAmount += discountAmount;
+
+        genealDetailDicount = {
+          code: discount.code,
+          percent: discount.percent,
+          amount: discount.amount,
+          discountAmount,
+        };
+      }
+    }
+    return {
+      totalAmount,
+      totalDiscountAmount,
+      foodItems,
+      genealDetailDicount,
+    };
+  }
 }

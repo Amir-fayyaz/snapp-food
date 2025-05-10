@@ -47,4 +47,16 @@ export class BasketAppController {
   ) {
     return await this.BasketService.addDiscountToBasket(data, user.user_id);
   }
+
+  //DELETE
+  @Delete('discount')
+  @Role(['user'])
+  @ApiOperation({ summary: 'For delete discount from basket' })
+  @ApiBody({ type: DiscountBasketDto })
+  async removeDiscountFromBasket(
+    @Body() data: DiscountBasketDto,
+    @getUser() user: IUser,
+  ) {
+    return await this.BasketService.removeDiscount(data, user.user_id);
+  }
 }

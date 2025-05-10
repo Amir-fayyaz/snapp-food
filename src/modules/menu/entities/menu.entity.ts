@@ -14,6 +14,9 @@ export class MenuEntity extends Base {
   @Column({ type: 'varchar' })
   image: string;
 
+  @Column({ type: 'boolean', default: true })
+  is_active: Boolean;
+
   @Column({ type: 'double', nullable: false })
   price: number;
 

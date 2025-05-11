@@ -27,7 +27,9 @@ export class OrderItemEntity extends Base {
   })
   status: OrderItemStatus;
 
-  @ManyToOne(() => OrderEntity, (order) => order.orderItems)
+  @ManyToOne(() => OrderEntity, (order) => order.orderItems, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'order' })
   order: OrderEntity;
 }

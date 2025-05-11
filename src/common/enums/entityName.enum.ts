@@ -12,4 +12,5 @@ export enum EntityName {
   Discount = 'discount',
   Order = 'order',
   OrderItem = 'order-item',
+  Payment = 'payment',
 }

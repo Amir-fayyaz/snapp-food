@@ -10,6 +10,7 @@ import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 import { TypeEntity } from 'src/modules/menu/entities/type.entity';
 import { OrderItemEntity } from 'src/modules/order/entities/order-item.entity';
 import { OrderEntity } from 'src/modules/order/entities/order.entitiy';
+import { PaymentEntity } from 'src/modules/payment/entities/payment.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { AddressEntity } from 'src/modules/users/entities/address.entity';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
@@ -37,6 +38,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     BasketEntity,
     OrderEntity,
     OrderItemEntity,
+    PaymentEntity,
   ],
   port: Number(DB_PORT),
   synchronize: true,

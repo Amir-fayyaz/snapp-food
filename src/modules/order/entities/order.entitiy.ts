@@ -5,6 +5,7 @@ import { OrderStatus } from '../enums/order.status.enum';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { AddressEntity } from 'src/modules/users/entities/address.entity';
 import { OrderItemEntity } from './order-item.entity';
+import { PaymentEntity } from 'src/modules/payment/entities/payment.entity';
 
 @Entity(EntityName.Order)
 export class OrderEntity extends Base {
@@ -35,4 +36,7 @@ export class OrderEntity extends Base {
 
   @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.order)
   orderItems: OrderItemEntity[];
+
+  @OneToMany(() => PaymentEntity, (payment) => payment.order)
+  payments: PaymentEntity[];
 }

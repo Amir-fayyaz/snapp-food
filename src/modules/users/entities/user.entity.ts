@@ -5,6 +5,7 @@ import { AddressEntity } from './address.entity';
 import { CommentEntity } from 'src/modules/menu/entities/comment.entity';
 import { BasketEntity } from 'src/modules/basket/entities/basket.entity';
 import { OrderEntity } from 'src/modules/order/entities/order.entitiy';
+import { PaymentEntity } from 'src/modules/payment/entities/payment.entity';
 
 @Entity(EntityName.User)
 export class UserEntity extends Base {
@@ -41,4 +42,7 @@ export class UserEntity extends Base {
 
   @OneToMany(() => OrderEntity, (order) => order.user)
   orders: OrderEntity[];
+
+  @OneToMany(() => PaymentEntity, (payment) => payment.user)
+  payments: PaymentEntity[];
 }

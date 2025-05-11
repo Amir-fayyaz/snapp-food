@@ -3,6 +3,7 @@ import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 import { SupplierEntity } from 'src/modules/supplier/entities/supplier.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { OrderItemStatus } from '../enums/order.status.enum';
+import { OrderEntity } from './order.entitiy';
 
 @Entity('order-item')
 export class OrderItemEntity extends Base {
@@ -25,4 +26,8 @@ export class OrderItemEntity extends Base {
     default: OrderItemStatus.Pending,
   })
   status: OrderItemStatus;
+
+  @ManyToOne(() => OrderEntity, (order) => order.orderItems)
+  @JoinColumn({ name: 'order' })
+  order: OrderEntity;
 }

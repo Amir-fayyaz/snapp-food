@@ -1,9 +1,10 @@
 import { Base } from 'src/common/abstracts/baseEntity';
 import { EntityName } from 'src/common/enums/entityName.enum';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { OrderStatus } from '../enums/order.status.enum';
 import { UserEntity } from 'src/modules/users/entities/user.entity';
 import { AddressEntity } from 'src/modules/users/entities/address.entity';
+import { OrderItemEntity } from './order-item.entity';
 
 @Entity(EntityName.Order)
 export class OrderEntity extends Base {
@@ -31,4 +32,7 @@ export class OrderEntity extends Base {
   })
   @JoinColumn({ name: 'address' })
   address: AddressEntity;
+
+  @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.order)
+  orderItems: OrderItemEntity[];
 }

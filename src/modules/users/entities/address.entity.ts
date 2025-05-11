@@ -1,7 +1,8 @@
 import { Base } from 'src/common/abstracts/baseEntity';
 import { EntityName } from 'src/common/enums/entityName.enum';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { UserEntity } from './user.entity';
+import { OrderEntity } from 'src/modules/order/entities/order.entitiy';
 
 @Entity(EntityName.Address)
 export class AddressEntity extends Base {
@@ -24,4 +25,7 @@ export class AddressEntity extends Base {
   @ManyToOne(() => UserEntity, (user) => user.addressList, { cascade: true })
   @JoinColumn({ name: 'user' })
   user: UserEntity;
+
+  @OneToMany(() => OrderEntity, (order) => order.address)
+  orders: OrderEntity[];
 }

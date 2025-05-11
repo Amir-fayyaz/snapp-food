@@ -11,4 +11,5 @@ export enum EntityName {
   Basket = 'basket',
   Discount = 'discount',
   Order = 'order',
+  OrderItem = 'order-item',
 }

@@ -6,6 +6,7 @@ import { CategoryEntity } from 'src/modules/category/entities/category.entity';
 import { TypeEntity } from 'src/modules/menu/entities/type.entity';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 import { DiscountEntity } from 'src/modules/discount/entites/discount.entity';
+import { OrderItemEntity } from 'src/modules/order/entities/order-item.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends Base {
@@ -50,4 +51,7 @@ export class SupplierEntity extends Base {
 
   @OneToMany(() => DiscountEntity, (discount) => discount.supplier)
   discounts: DiscountEntity[];
+
+  @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.supplier)
+  orders: OrderItemEntity[];
 }

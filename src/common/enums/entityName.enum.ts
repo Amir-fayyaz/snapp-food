@@ -10,4 +10,5 @@ export enum EntityName {
   Comment = 'comment',
   Basket = 'basket',
   Discount = 'discount',
+  Order = 'order',
 }

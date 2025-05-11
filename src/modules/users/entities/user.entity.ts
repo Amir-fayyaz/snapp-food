@@ -4,6 +4,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { AddressEntity } from './address.entity';
 import { CommentEntity } from 'src/modules/menu/entities/comment.entity';
 import { BasketEntity } from 'src/modules/basket/entities/basket.entity';
+import { OrderEntity } from 'src/modules/order/entities/order.entitiy';
 
 @Entity(EntityName.User)
 export class UserEntity extends Base {
@@ -37,4 +38,7 @@ export class UserEntity extends Base {
 
   @OneToMany(() => BasketEntity, (basket) => basket.user)
   baskets: BasketEntity[];
+
+  @OneToMany(() => OrderEntity, (order) => order.user)
+  orders: OrderEntity[];
 }

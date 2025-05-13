@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { PaymentAppModule } from './client/payment.client.module';
 
 @Module({
-  imports: [],
+  imports: [PaymentAppModule],
   controllers: [],
   providers: [],
 })

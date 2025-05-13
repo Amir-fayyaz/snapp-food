@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { catchError, lastValueFrom, map } from 'rxjs';
 import { SendRequestDto } from '../../dto/sendRequest.dto';
+import { VerifyPaymentDto } from '../../dto/verifyPayment.dto';
 
 @Injectable()
 export class ZarinPalService {
@@ -51,8 +52,24 @@ export class ZarinPalService {
     throw new BadRequestException('Connection faild , please try later');
   }
 
-  public async sendVerifyRequest(data: unknown) {
-    const { ZARINPAL_VERIFY_URL } = process.env;
-    this.httpService.post(ZARINPAL_VERIFY_URL, data, {});
+  public async sendVerifyRequest(data: VerifyPaymentDto) {
+    const { ZARINPAL_VERIFY_URL, ZARINPAL_MERCHANT_ID } = process.env;
+    const options = {
+      authority: data.authority,
+      amount: data.amount,
+      merchant_id: ZARINPAL_MERCHANT_ID,
+    };
+    const result = await lastValueFrom(
+      this.httpService
+        .post(ZARINPAL_VERIFY_URL, options, {})
+        .pipe(map((res) => res.data))
+        .pipe(
+          catchError((error) => {
+            throw new InternalServerErrorException(error.message);
+          }),
+        ),
+    );
+
+    return result;
   }
 }

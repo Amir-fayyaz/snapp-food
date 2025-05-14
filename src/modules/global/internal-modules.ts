@@ -9,6 +9,7 @@ import { BasketModule } from '../basket/basket.module';
 import { OrderModule } from '../order/order.module';
 import { PaymentModule } from '../payment/payment.module';
 import { HttpApiModule } from '../http/http.module';
+import { WebSocketModule } from '../chat/socket.module';
 
 export const InternalModules = [
   CategoryModule,
@@ -25,4 +26,5 @@ export const InternalModules = [
   OrderModule,
   PaymentModule,
   HttpApiModule,
+  WebSocketModule,
 ];

@@ -7,6 +7,7 @@ import { TypeEntity } from 'src/modules/menu/entities/type.entity';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
 import { DiscountEntity } from 'src/modules/discount/entites/discount.entity';
 import { OrderItemEntity } from 'src/modules/order/entities/order-item.entity';
+import { ChatEntity } from 'src/modules/chat/entities/chat.entity';
 
 @Entity(EntityName.Supplier)
 export class SupplierEntity extends Base {
@@ -54,4 +55,7 @@ export class SupplierEntity extends Base {
 
   @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.supplier)
   orders: OrderItemEntity[];
+
+  @OneToMany(() => ChatEntity, (chat) => chat.supplier)
+  messages: ChatEntity[];
 }

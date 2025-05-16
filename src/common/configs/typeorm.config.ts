@@ -4,6 +4,7 @@ import { SupplierOtpEntity } from 'src/modules/auth/entities/supplier-otp.entity
 import { OtpEntity } from 'src/modules/auth/entities/user-otp.entity';
 import { BasketEntity } from 'src/modules/basket/entities/basket.entity';
 import { CategoryEntity } from 'src/modules/category/entities/category.entity';
+import { ChatEntity } from 'src/modules/chat/entities/chat.entity';
 import { DiscountEntity } from 'src/modules/discount/entites/discount.entity';
 import { CommentEntity } from 'src/modules/menu/entities/comment.entity';
 import { MenuEntity } from 'src/modules/menu/entities/menu.entity';
@@ -39,6 +40,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     OrderEntity,
     OrderItemEntity,
     PaymentEntity,
+    ChatEntity,
   ],
   port: Number(DB_PORT),
   synchronize: true,
